@@ -28,4 +28,5 @@ A letra é dividida em sequências de 3 palavras consecutivas. É calculada uma 
 
 ## Dataset
 
-Utilizamos o dataset [55,000+ Song Lyrics](https://www.kaggle.com/) do Kaggle, que inclui título, artista, género e letra completa de cada música. Para a demonstração, incluímos casos reais de plágio conhecidos como ponto de partida para validar o sistema.
+Utilizamos o dataset [Song lyrics from 79 musical genres](https://www.kaggle.com/datasets/neisse/scrapped-lyrics-from-6-genres) do Kaggle, que contém 2 ficheiros com informaç
+ões sobre os artistas os géneros musicais e as letras das músicas.
