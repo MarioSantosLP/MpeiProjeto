@@ -106,7 +106,7 @@ songs = songs(uniqueIdx, :);
 fprintf("Rows after removing duplicates: %d\n", height(songs));
 
 nbText = songs.lyricClean;
-nbLabels = categorical(songs.genre);
+nbLabels = string(songs.genre); %fix store as string
 
 bloomKeys = songs.songKey;
 
@@ -125,7 +125,7 @@ writetable(songs, fullfile(processedDir, "songs_clean.csv"), ...
 
 fprintf("\nDataset prepared successfully.\n");
 fprintf("Final number of songs: %d\n", height(songs));
-fprintf("Number of genres: %d\n", numel(categories(nbLabels)));
+fprintf("Number of genres: %d\n", numel(unique(nbLabels)));
 fprintf("Saved MAT file: %s\n", fullfile(processedDir, "songs_dataset.mat"));
 fprintf("Saved CSV file: %s\n", fullfile(processedDir, "songs_clean.csv"));
 
