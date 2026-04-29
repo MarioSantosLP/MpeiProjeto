@@ -1,0 +1,18 @@
+function hash = string2hash(str, type)
+    str = double(str);
+    if (nargin < 2), type = 'djb2'; end
+    switch(type)
+        case 'djb2'
+            hash = 5381;
+            for i = 1:length(str)
+                hash = mod(hash * 33 + str(i), 2^32 - 1);
+            end
+        case 'sdbm'
+            hash = 0;
+            for i = 1:length(str)
+                hash = mod(hash * 65599 + str(i), 2^32 - 1);
+            end
+        otherwise
+            error('string2hash:inputs', 'unknown type');
+    end
+end
