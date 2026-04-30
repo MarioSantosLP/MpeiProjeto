@@ -7,6 +7,9 @@ scriptDir = fileparts(mfilename('fullpath'));
 projectDir = fileparts(scriptDir);
 
 dataPath = fullfile(projectDir, "data", "processed", "songs_dataset.mat");
+if ~isfile(dataPath)
+    error("Dataset file not found %s \n Run prepare_dataset.m first", dataPath);
+end
 load(dataPath, "nbText", "nbLabels");
 
 nbText = string(nbText);
@@ -15,10 +18,11 @@ nbLabels = string(nbLabels);
 %% PARAMETERS
 minSize = 3;
 minWordFrequency = 15;
-numGenresToUse = 5;
+
+% numGenresToUse = 5; % only used if genres are selected automatically
 maxSongsPerGenre = 2000; 
 trainRatio = 0.8;
-useBinary = true; % true = Binário, false = TF-IDF
+useBinary = true; % true = Binary, false = TF-IDF
 
 %% STOP WORDS
 stopWords = ["the","and","you","that","was","for","are","with","his","her", ...
@@ -34,22 +38,40 @@ stopWords = ["the","and","you","that","was","for","are","with","his","her", ...
              "você","seu","sua","ele","ela","nos","sem","bem","vai","ser"];
 
 %% SELECT DATA
+
+% Hard-coded on purpose for controlled testing.
 selectedGenres = ["gospel", "heavy metal", "sertanejo", "country", "j-pop"];
+
+% Automatic version, not being used for now:
+% [genres, ~, genreIdx] = unique(nbLabels);
+% genreCounts = accumarray(genreIdx, 1);
+% genreStats = table(genres, genreCounts, ...
+%     'VariableNames', {'Genre', 'SongCount'});
+% genreStats = sortrows(genreStats, "SongCount", "descend");
+% numGenresToUse = 5;
+% selectedGenres = genreStats.Genre(1:min(numGenresToUse, height(genreStats)));
 
 validGenres = ismember(selectedGenres, unique(nbLabels));
 fprintf("Géneros encontrados: %d/%d\n", sum(validGenres), length(selectedGenres));
+
 selectedGenres = selectedGenres(validGenres);
+numGenresToUse = length(selectedGenres);
+
+if isempty(selectedGenres)
+    error("None of the selected genres were found in the dataset.");
+end
 
 rng(1)
-selectedRows = [];
+selectedRowsParts = cell(length(selectedGenres),1) ;
 
 for i = 1:length(selectedGenres)
     rows = find(nbLabels == selectedGenres(i));
     rows = rows(randperm(length(rows)));
     rows = rows(1:min(maxSongsPerGenre, length(rows)));
-    selectedRows = [selectedRows; rows(:)];
+    selectedRowsParts{i} =rows(:);
 end
 
+selectedRows= vertcat(selectedRowsParts{:}); %changed to accumulate in vertcat instead of repeated allocs in loop
 lyrics = nbText(selectedRows);
 labels = nbLabels(selectedRows);
 
@@ -67,7 +89,7 @@ trainLabels = labels(trainIdx);
 testText    = lyrics(testIdx);
 testLabels  = labels(testIdx);
 
-%% vocab
+%% VOCAB
 allTokens = cellstr(split(strjoin(trainText, " ")));
 allTokens = allTokens(cellfun(@(x) strlength(x) >= minSize, allTokens));
 allTokensStr = string(allTokens);
@@ -92,6 +114,7 @@ for lyric_i = 1:numLyrics
 
     tokens = cellstr(split(trainText(lyric_i)));
     tokensStr = string(tokens);
+
     tokens = tokens(cellfun(@(x) strlength(x) >= minSize, tokens) & ...
         ~ismember(tokensStr, stopWords));
 
@@ -112,7 +135,7 @@ end
 
 close(h);
 
-%% final bow
+%% FINAL BOW
 h = waitbar(0, 'Representação final...');
 
 if useBinary
@@ -132,7 +155,7 @@ end
 waitbar(1, h);
 close(h);
 
-%%
+%% PRIOR
 classes = unique(trainLabels);
 prior = zeros(1, length(classes));
 
@@ -140,7 +163,7 @@ for class_i = 1:length(classes)
     prior(class_i) = sum(trainLabels == classes(class_i)) / length(trainLabels);
 end
 
-%% likelihood
+%% LIKELIHOOD
 loglikelihood = zeros(length(classes), szVocab);
 
 h = waitbar(0, 'Likelihood...');
@@ -181,7 +204,15 @@ save(savePath, ...
     "testLabels");
 
 fprintf("\nNaive Bayes model saved.\n");
-fprintf("Mode: %s\n", string(useBinary).replace("true","Binary").replace("false","TF-IDF"));
+
+if useBinary
+    modeName = "Binary";
+else
+    modeName = "TF-IDF";
+end
+
+% fprintf("Mode: %s\n", string(useBinary).replace("true","Binary").replace("false","TF-IDF"));
+fprintf("Mode: %s\n", modeName);
 fprintf("Genres used: %d\n", length(classes));
 fprintf("Vocabulary size: %d\n", length(vocabulary));
 fprintf("Train songs: %d\n", length(trainText));

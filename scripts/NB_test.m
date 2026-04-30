@@ -9,6 +9,10 @@ projectDir = fileparts(scriptDir);
 modelPath = fullfile(projectDir, "data", "processed", "naiveBayesGenre.mat");
 load(modelPath);
 
+if ~isfile(modelPath)
+    error("File not found: %s \n, run prepare_dataset.m", modelPath);
+end
+
 %% vocab map(once)
 vocabMap = containers.Map(vocabulary, 1:numel(vocabulary));
 

@@ -12,9 +12,7 @@ function [res, probs] = NB_classify(lyric, prior, vocabMap, loglikelihood, class
 
     if ~isempty(tokens)
         indices = cell2mat(values(vocabMap, tokens));
-        for class_i = 1:length(classes)
-            probs(class_i) = probs(class_i) + sum(loglikelihood(class_i, indices));
-        end
+        probs = probs +sum(loglikelihood(:,indices), 2)';
     end
 
     [~, bestClass] = max(probs);
