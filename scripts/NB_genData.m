@@ -90,13 +90,50 @@ testText    = lyrics(testIdx);
 testLabels  = labels(testIdx);
 
 %% VOCAB
-allTokens = cellstr(split(strjoin(trainText, " ")));
-allTokens = allTokens(cellfun(@(x) strlength(x) >= minSize, allTokens));
-allTokensStr = string(allTokens);
-allTokens = allTokens(~ismember(allTokensStr, stopWords));
+tokenCounts = containers.Map('KeyType', 'char', 'ValueType', 'double');
+h = waitbar(0, 'Vocabulary...');
 
-[allWords, ~, wordIdx] = unique(allTokens);
-allCounts = accumarray(wordIdx, 1);
+for i = 1:length(trainText)
+
+    lyricTokens = cellstr(split(trainText(i)));
+    lyricTokens = lyricTokens(~cellfun('isempty', lyricTokens));
+
+    lyricTokensStr = string(lyricTokens);
+
+    validTokens = strlength(lyricTokensStr) >= minSize & ...
+                  ~ismember(lyricTokensStr, stopWords);
+
+    lyricTokens = lyricTokens(validTokens);
+
+    if isempty(lyricTokens)
+        continue;
+    end
+
+    [uniqueTokens, ~, tokenIdx] = unique(lyricTokens);
+    tokenFreq = accumarray(tokenIdx, 1);
+
+    for j = 1:numel(uniqueTokens)
+
+        token = uniqueTokens{j};
+
+        if isKey(tokenCounts, token)
+            tokenCounts(token) = tokenCounts(token) + tokenFreq(j);
+        else
+            tokenCounts(token) = tokenFreq(j);
+        end
+
+    end
+
+    if mod(i, 100) == 0
+        waitbar(i / length(trainText), h);
+    end
+
+end
+
+close(h);
+
+allWords = keys(tokenCounts);
+allCounts = cell2mat(values(tokenCounts, allWords));
 
 vocabulary = allWords(allCounts >= minWordFrequency);
 vocabulary = vocabulary(:);
