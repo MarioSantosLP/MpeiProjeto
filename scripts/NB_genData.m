@@ -16,7 +16,7 @@ nbLabels = string(nbLabels);
 minSize = 3;
 minWordFrequency = 15;
 numGenresToUse = 5;
-maxSongsPerGenre = 2000;
+maxSongsPerGenre = 2000; 
 trainRatio = 0.8;
 useBinary = true; % true = Binário, false = TF-IDF
 
@@ -67,7 +67,7 @@ trainLabels = labels(trainIdx);
 testText    = lyrics(testIdx);
 testLabels  = labels(testIdx);
 
-%% VOCABULARY
+%% vocab
 allTokens = cellstr(split(strjoin(trainText, " ")));
 allTokens = allTokens(cellfun(@(x) strlength(x) >= minSize, allTokens));
 allTokensStr = string(allTokens);
@@ -112,7 +112,7 @@ end
 
 close(h);
 
-%% BOW -> representação final
+%% final bow
 h = waitbar(0, 'Representação final...');
 
 if useBinary
@@ -132,7 +132,7 @@ end
 waitbar(1, h);
 close(h);
 
-%% PRIOR
+%%
 classes = unique(trainLabels);
 prior = zeros(1, length(classes));
 
@@ -140,7 +140,7 @@ for class_i = 1:length(classes)
     prior(class_i) = sum(trainLabels == classes(class_i)) / length(trainLabels);
 end
 
-%% LIKELIHOOD
+%% likelihood
 loglikelihood = zeros(length(classes), szVocab);
 
 h = waitbar(0, 'Likelihood...');

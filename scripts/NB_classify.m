@@ -2,7 +2,7 @@ function [res, probs] = NB_classify(lyric, prior, vocabMap, loglikelihood, class
 
     probs = log(prior);
 
-    % Filtrar tokens curtos e stop words
+    % Filtrar small tokens and the stop words
      tokens = cellstr(split(string(lyric)));
     tokensStr = string(tokens);
     tokens = tokens(cellfun(@(x) strlength(x) >= minSize, tokens) & ...

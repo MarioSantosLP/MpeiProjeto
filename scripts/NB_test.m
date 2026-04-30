@@ -2,17 +2,17 @@ clear
 clc
 tic
 
-%% LOAD MODEL
+%% load
 scriptDir = fileparts(mfilename('fullpath'));
 projectDir = fileparts(scriptDir);
 
 modelPath = fullfile(projectDir, "data", "processed", "naiveBayesGenre.mat");
 load(modelPath);
 
-%% BUILD VOCAB MAP (once)
+%% vocab map(once)
 vocabMap = containers.Map(vocabulary, 1:numel(vocabulary));
 
-%% TEST
+%% test
 numLyrics = length(testText);
 predictedLabels = strings(numLyrics, 1);
 
@@ -37,7 +37,7 @@ end
 
 close(h);
 
-%% RESULTS
+%% res
 accuracy = sum(predictedLabels == testLabels) / numLyrics;
 fprintf("Accuracy: %.2f%%\n", accuracy * 100);
 
@@ -77,7 +77,7 @@ disp(array2table(confMat, ...
     "RowNames",      cellstr(order), ...
     "VariableNames", matlab.lang.makeValidName(cellstr("pred_" + string(order)))));
 
-%% SAVE RESULTS
+%% save the res to a file 
 savePath = fullfile(projectDir, "data", "processed", "nb_results.mat");
 
 save(savePath, ...
