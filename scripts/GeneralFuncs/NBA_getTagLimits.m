@@ -1,23 +1,15 @@
-function tagLimits = NBA_getTagLimits(statsMatrix, statNames)
+function tagLimits = NBA_getTagLimits(~, ~)
 
     tagLimits = struct();
 
-    for i = 1:length(statNames)
-
-        values = statsMatrix(:, i);
-        values = values(~isnan(values));
-        values = sort(values);
-
-        n = length(values);
-
-        idxQ1 = max(1, ceil(0.25 * n));
-        idxQ2 = max(1, ceil(0.50 * n));
-        idxQ3 = max(1, ceil(0.75 * n));
-
-        limits = [values(idxQ1), values(idxQ2), values(idxQ3)];
-
-        tagLimits.(char(statNames(i))) = limits;
-
-    end
+    tagLimits.points      = [8, 15, 25];
+    tagLimits.rebounds    = [3, 6, 9];
+    tagLimits.assists     = [2, 5, 7];
+    tagLimits.steals      = [0.7, 1.2, 1.8];
+    tagLimits.blocks      = [0.3, 0.8, 1.5];
+    tagLimits.fg          = [40, 45, 51];
+    tagLimits.three_point = [20, 29, 35];
+    tagLimits.two_point   = [44, 48, 52];
+    tagLimits.ft          = [65, 75, 82];
 
 end
