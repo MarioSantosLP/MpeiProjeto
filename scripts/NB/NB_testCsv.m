@@ -8,7 +8,7 @@ while ~isfolder(fullfile(projectDir, "data", "processed")) && ...
     projectDir = fileparts(projectDir);
 end
 
-addpath(fullfile(projectDir, "scripts", "generalFuncs"));
+addpath(fullfile(projectDir, "scripts", "GeneralFuncs"));
 addpath(fullfile(projectDir, "scripts", "NB"));
 
 modelPath = fullfile(projectDir, "data", "processed", "naiveBayesNBA.mat");
