@@ -8,7 +8,16 @@ while ~isfolder(fullfile(projectDir, "data", "raw")) && ...
     projectDir = fileparts(projectDir);
 end
 
-rawPath = fullfile(projectDir, "data", "raw", "Seasons_Stats.csv");
+rawDir = fullfile(projectDir, "data", "raw");
+rawPath = fullfile(rawDir, "Seasons_Stats.csv");
+if ~isfolder(rawDir)
+    error("prepare_dataset:ProjectRootNotFound", ...
+        "Could not locate project root containing data/raw. Run this script from within the project repository.");
+end
+if ~isfile(rawPath)
+    error("prepare_dataset:RawDatasetMissing", ...
+        "Required raw dataset not found: %s", rawPath);
+end
 processedDir = fullfile(projectDir, "data", "processed");
 
 if ~exist(processedDir, "dir")
