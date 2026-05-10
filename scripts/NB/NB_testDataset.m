@@ -94,7 +94,12 @@ end
 
 disp(allResults);
 
-accuracy = sum(allResults.Correct) / height(allResults);
+if height(allResults) <= 0
+    disp("No results to calculate accuracy.");
+    accuracy = 0;
+else
+    accuracy = sum(allResults.Correct) / height(allResults);
+end
 
 fprintf("\nAccuracy on selected dataset players: %.2f%%\n", accuracy * 100);
 

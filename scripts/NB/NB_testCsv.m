@@ -14,6 +14,15 @@ addpath(fullfile(projectDir, "scripts", "NB"));
 modelPath = fullfile(projectDir, "data", "processed", "naiveBayesNBA.mat");
 csvPath = fullfile(projectDir, "data", "raw", "current_players_test.csv");
 
+
+if ~isfile(csvPath)
+    error("CSV file not found: %s", csvPath);
+end
+
+if ~isfile(modelPath)
+    error("Model not found. Run scripts/NB/NB_genData.m first.");
+end
+
 load(modelPath);
 
 T = readtable(csvPath, "TextType", "string");
