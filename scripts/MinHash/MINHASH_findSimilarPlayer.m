@@ -1,4 +1,4 @@
-function resultTable = MINHASH_findSimilarPlayer(playerName, threshold, maxResults)
+function resultTable = MINHASH_findSimilarPlayer(playerName, threshold, maxResults, year, includeSelf)
 
     if nargin < 2 || isempty(threshold)
         threshold = 0.6;
@@ -6,6 +6,14 @@ function resultTable = MINHASH_findSimilarPlayer(playerName, threshold, maxResul
 
     if nargin < 3 || isempty(maxResults)
         maxResults = 10;
+    end
+
+    if nargin < 4
+        year = [];
+    end
+
+    if nargin < 5 || isempty(includeSelf)
+        includeSelf = false;
     end
 
     scriptDir = fileparts(mfilename('fullpath'));
@@ -16,9 +24,7 @@ function resultTable = MINHASH_findSimilarPlayer(playerName, threshold, maxResul
         projectDir = fileparts(projectDir);
     end
 
-    addpath(fullfile(projectDir, "scripts", "MINHASH"));
-    addpath(fullfile(projectDir, "scripts", "GeneralFuncs"));
-    addpath(fullfile(projectDir, "scripts", "NB"));
+    addpath(genpath(fullfile(projectDir, "scripts")));
 
     modelPath = fullfile(projectDir, "data", "processed", "minHashNBA.mat");
 
@@ -31,13 +37,23 @@ function resultTable = MINHASH_findSimilarPlayer(playerName, threshold, maxResul
     playerName = lower(string(playerName));
     matches = find(contains(lower(cleanTable.Player), playerName));
 
+    if ~isempty(year)
+        matches = matches(cleanTable.Year(matches) == year);
+    end
+
     if isempty(matches)
         error("Jogador não encontrado.");
     end
 
-    selectedIdx = matches(end);
+    selectedIdx = matches(1);
 
-    [similarIdx, similarities] = MINHASH_findSimilar(playerTags{selectedIdx}, MH, threshold, R, selectedIdx);
+    if includeSelf
+        excludeIdx = [];
+    else
+        excludeIdx = selectedIdx;
+    end
+
+    [similarIdx, similarities] = MINHASH_findSimilar(playerTags{selectedIdx}, MH, threshold, R, excludeIdx);
 
     if isempty(similarIdx)
         resultTable = table();
