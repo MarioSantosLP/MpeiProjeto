@@ -24,8 +24,8 @@ if ~exist(processedDir, "dir")
     mkdir(processedDir);
 end
 
-startYear = 1988;
-endYear = 1999;
+startYear = 1985;
+endYear = 2000;
 minGames = 20;
 minMinutesPerGame = 15;
 
