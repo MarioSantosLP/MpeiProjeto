@@ -16,7 +16,7 @@ function resultTable = MINHASH_findSimilarStats(statsRow, threshold, maxResults)
         projectDir = fileparts(projectDir);
     end
 
-    addpath(fullfile(projectDir, "scripts", "MINHASH"));
+    addpath(fullfile(projectDir, "scripts", "MinHash"));
     addpath(fullfile(projectDir, "scripts", "GeneralFuncs"));
     addpath(fullfile(projectDir, "scripts", "NB"));
 

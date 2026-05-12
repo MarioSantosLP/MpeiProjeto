@@ -15,11 +15,8 @@ function [similarIdx, similarities] = MINHASH_findSimilar(itemTags, MH, threshol
     end
 
     MH2 = MINHASH_genMH({itemTags}, R, false);
-    allSimilarities = zeros(1, size(MH, 2));
 
-    for column_i = 1:size(MH, 2)
-        allSimilarities(column_i) = sum(MH2(:) == MH(:, column_i)) / R.k;
-    end
+    allSimilarities = mean(MH == repmat(MH2, 1, size(MH, 2)), 1);
 
     allSimilarities(excludeIdx) = -inf;
 
