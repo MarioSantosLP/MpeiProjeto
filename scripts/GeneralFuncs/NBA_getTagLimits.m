@@ -9,7 +9,7 @@ function tagLimits = NBA_getTagLimits(~, ~)
     tagLimits.blocks         = [0.3, 0.8, 1.5];
     tagLimits.fg             = [43, 47, 51];
     tagLimits.three_point    = [20, 30, 36];
-    tagLimits.three_attempts = [0.5, 2, 5];
+    tagLimits.three_attempts = [1, 3, 6];
     tagLimits.two_point      = [44, 48, 52];
     tagLimits.ft             = [65, 75, 82];
 
