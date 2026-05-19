@@ -170,7 +170,7 @@ rightH = contentH;
 rightPad = 26;
 resultW = rightW - rightPad * 2;
 
-% --- RIGHT PANEL ---
+% right panel
 
 uilabel(rightPanel, ...
     'Text', 'RESULTS', ...

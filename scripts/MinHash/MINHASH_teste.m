@@ -28,14 +28,14 @@ statsJordan = [34.98, 5.48, 5.91, 3.16, 1.60, 53.5, 13.2, 0.65, 54.6, 84.1];
 
 %% test 1 - find similar players by stats
 
-fprintf("\n--- TEST 1: Michael Jordan 1988 profile ---\n");
+fprintf("\n TEST 1: Michael Jordan 1988 profile \n");
 
 result = MINHASH_findSimilarStats(statsJordan, threshold, maxResults);
 disp(result);
 
 %% test 2 - compare MinHash with exact Jaccard
 
-fprintf("\n--- TEST 2: MinHash vs exact Jaccard ---\n");
+fprintf("\n TEST 2: MinHash vs exact Jaccard \n");
 
 queryTags = NBA_statsToTags(statsJordan, tagLimits, statNames);
 
@@ -63,7 +63,7 @@ disp(comparison);
 
 %% test 3 - compare different values of k
 
-fprintf("\n--- TEST 3: Different values of k ---\n");
+fprintf("\n TEST 3: Different values of k\n");
 
 kValues = [50, 100, 200];
 

@@ -25,13 +25,10 @@ classes = string(classes(:));
 numRepeats = 10;
 trainRatio = 0.8;
 
-fprintf("\n==============================\n");
-fprintf("NAIVE BAYES NBA TESTS\n");
-fprintf("==============================\n");
 
 %% TEST 1 - saved test set
 
-fprintf("\n\n--- TEST 1: saved train/test split ---\n");
+fprintf("\n TEST 1: saved train/test split \n");
 
 predictedLabels = strings(length(testTags), 1);
 
@@ -53,7 +50,7 @@ printConfusion(confMat1, classes);
 
 %% TEST 2 - repeated random splits
 
-fprintf("\n\n--- TEST 2: repeated random splits ---\n");
+fprintf("\n\n TEST 2: repeated random splits\n");
 
 allTags = getTagsFromStats(statsMatrix, prior, vocabulary, loglikelihood, classes, tagLimits, statNames);
 allLabels = string(cleanTable.Pos);
@@ -116,9 +113,9 @@ stdRow = table( ...
 fprintf("\nRepeated test summary:\n");
 disp([meanRow; stdRow]);
 
-%% TEST 3 - era comparison
+%% TEST 3 - era comp
 
-fprintf("\n\n--- TEST 3: era comparison ---\n");
+fprintf("\n TEST 3: era comp\n");
 
 eraResults = table();
 

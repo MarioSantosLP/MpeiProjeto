@@ -1,19 +1,5 @@
 function result = NBA_main(playerName, playerYear, playerTm, playerStats)
-% NBA_MAIN
-% Given a current player's stats, finds the most similar 90s NBA player.
-%
-% Inputs:
-%   playerName  - string, e.g. "LeBron James"
-%   playerYear  - number, e.g. 2024
-%   playerTm    - string, team abbreviation e.g. "LAL"
-%   playerStats - 1x10 vector: [PTS, TRB, AST, STL, BLK, FGpct, P3pct, P3A, P2pct, FTpct]
-%
-% Output:
-%   result - struct with fields:
-%     .inDataset     - true if player already exists in 90s dataset
-%     .position      - predicted position (string)
-%     .tags          - profile tags (string array)
-%     .matches       - table with top 3 similar 90s players
+
 
     scriptDir  = fileparts(mfilename('fullpath'));
     projectDir = scriptDir;
@@ -36,8 +22,7 @@ function result = NBA_main(playerName, playerYear, playerTm, playerStats)
     load(mhPath, "MH", "R", "playerTags", "positionLabels");
     load(bfPath, "bf");
 
-    %% STEP 1: BLOOM FILTER
-    % Check if player already exists in the 90s dataset
+    %% STEP 1:BF
     key = lower(strtrim(playerName)) + "_" + string(playerYear) + "_" + lower(strtrim(playerTm));
 
     result.inDataset = bf.exists(key);
@@ -52,28 +37,27 @@ function result = NBA_main(playerName, playerYear, playerTm, playerStats)
 
     fprintf("[BF] '%s' is not in the 90s dataset. Proceeding...\n", playerName);
 
-    %% STEP 2: NAIVE BAYES — predict position
+    %% NB
     [position, ~, ~] = NB_classifyPlayer(playerStats, prior, vocabulary, loglikelihood, classes, tagLimits, statNames);
 
     result.position = position;
     fprintf("[NB] Predicted position: %s\n", position);
 
-    %% STEP 3: MINHASH — find similar 90s players
-    % Convert stats to tags
+    %% minhash
+
     tags = NBA_statsToTags(playerStats, tagLimits, statNames);
     result.tags = tags;
 
-    % Only compare against players of the same predicted position
+
     positionMask = positionLabels == position;
     positionIdx  = find(positionMask);
 
-    % Find similar players using MinHash
     threshold = 0.3;
     [similarIdx, similarities] = MINHASH_findSimilar(tags, MH(:, positionIdx), threshold, R);
 
     similarIdx = positionIdx(similarIdx);
 
-    %% BUILD RESULTS TABLE
+    %% table
     topN = min(3, length(similarIdx));
 
     names       = strings(topN, 1);
@@ -94,7 +78,7 @@ function result = NBA_main(playerName, playerYear, playerTm, playerStats)
     result.matches = table(names, years, teams, positions, sims, ...
         'VariableNames', {'Player', 'Year', 'Team', 'Position', 'Similarity'});
 
-    %% PRINT RESULTS
+    %% res
     fprintf("\nTop similar 90s players to %s:\n", playerName);
     for i = 1:topN
         fprintf("  %d. %s (%d, %s) — %.1f%%\n", ...
