@@ -23,7 +23,7 @@ function result = NBA_main(playerName, playerYear, playerTm, playerStats)
     load(bfPath, "bf");
 
     %% STEP 1:BF
-    key = lower(strtrim(playerName)) + "_" + string(playerYear) + "_" + lower(strtrim(playerTm));
+    key = lower(strtrim(playerName)) + "_" + string(playerYear);
 
     result.inDataset = bf.exists(key);
 
