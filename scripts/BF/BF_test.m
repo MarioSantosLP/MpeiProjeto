@@ -47,9 +47,9 @@ end
 fprintf("\n=== Test 2: Membership queries ===\n");
 
 testAbsent = [
-    "lebron james_2003_cle";
-    "stephen curry_2010_gsw";
-    "kevin durant_2007_okc";
+    "lebron james_2003";
+    "stephen curry_2010";
+    "kevin durant_2007";
 ];
 
 for i = 1:length(testAbsent)
@@ -121,7 +121,7 @@ plot(kValues, empFPvec,  'b-o', 'LineWidth', 2, 'MarkerFaceColor', 'b'); hold on
 plot(kValues, theoFPvec, 'r--s', 'LineWidth', 2, 'MarkerFaceColor', 'r');
 xlabel('Number of hash functions (k)');
 ylabel('False positive rate (%)');
-title('Bloom Filter — False Positive Rate vs k (NBA dataset, n=38140)');
+title('Bloom Filter — False Positive Rate vs k (NBA dataset, n=3814)');
 legend('Empirical', 'Theoretical');
 grid on;
 xticks(kValues);
