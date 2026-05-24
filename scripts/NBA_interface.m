@@ -295,7 +295,7 @@ end
                 shootFields{5}.Value
             ];
 
-            result = NBA_main(name, 0, "", stats);
+            result = NBA_main(name, 0, stats);
 
             for j = 1:numMatches
                 matchLabels{j}.Text = '—';
@@ -338,7 +338,7 @@ end
         end
 
         findBtn.Enable = 'on';
-        findBtn.Text = 'Find my 90s twin';
+        findBtn.Text = 'Find 90s Comparison';
     end
 
 end

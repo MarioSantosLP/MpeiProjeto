@@ -1,4 +1,4 @@
-function result = NBA_main(playerName, playerYear, playerTm, playerStats)
+function result = NBA_main(playerName, playerYear, playerStats)
 
 
     scriptDir  = fileparts(mfilename('fullpath'));
