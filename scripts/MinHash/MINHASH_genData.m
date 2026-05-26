@@ -11,7 +11,7 @@ end
 
 addpath(fullfile(projectDir, "scripts", "GeneralFuncs"));
 addpath(fullfile(projectDir, "scripts", "NB"));
-addpath(fullfile(projectDir, "scripts", "MINHASH"));
+addpath(fullfile(projectDir, "scripts", "MinHash"));
 
 dataPath = fullfile(projectDir, "data", "processed", "nba_90s_clean.mat");
 saveDir = fullfile(projectDir, "data", "processed");

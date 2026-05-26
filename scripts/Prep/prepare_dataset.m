@@ -223,7 +223,7 @@ cleanTable = table(Player, Year, Pos, Age, Tm, G, MPG, PTS, TRB, AST, STL, BLK, 
 
 statsMatrix = [PTS, TRB, AST, STL, BLK, FGp, P3p, P3A, P2p, FTp];
 positionLabels = Pos;
-bloomKeys = lower(Player + "_" + string(Year) + "_" + Tm);
+bloomKeys = lower(Player + "_" + string(Year));
 
 csvPath = fullfile(processedDir, "nba_90s_clean.csv");
 matPath = fullfile(processedDir, "nba_90s_clean.mat");
